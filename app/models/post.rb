@@ -4,6 +4,6 @@ class Post < ApplicationRecord
   belongs_to :user, foreign_key: "author_id"
 
   validates :title, presence: true
-  validates :content, presence: true
+  validates :body, presence: true
   scope :ordered_by_votes, -> {joins(:votes).group('posts.id').order('SUM("votes.value")')}
 end

@@ -1,0 +1,9 @@
+<% if @nested %>
+  <h2><%= @user %>'s Posts</h2>
+<% else %>
+  <h2>All Posts</h2>
+<% end %>
+<% @posts.each do |post| %>
+  <h3><%= link_to post.title, post_path(post) %></h3>
+  <h3><%= post.user.username %></h3>
+<% end %>
