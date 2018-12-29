@@ -7,20 +7,25 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   </head>
 
   <body>
-    <h1><%= link_to "FLEDDIT", root_path %></h1>
+    <h1 style="text-align: center"><%= link_to "FLEDDIT", root_path %></h1>
     <% if logged_in? %>
-      <%= link_to "New Post", new_post_path %> |
-      <%= link_to "Profile", user_path(current_user) %> |
-      <%= link_to "Log Out", logout_path, method: :delete %>
+      <div style="text-align: center">
+        <%= link_to "New Post", new_post_path %> |
+        <%= link_to "Profile", user_posts_path(current_user) %> |
+        <%= link_to "Log Out", logout_path, method: :delete %>
+      </div>
     <% else %>
       <%= link_to "Sign Up", signup_path %>
       <%= link_to "Log In", login_path %>
     <% end %>
     <br><br>
-    <%= flash[:message] if flash[:message] %>
-    <%= yield %>
+    <div style="text-align: center">
+      <%= flash[:message] if flash[:message] %>
+    </div>
+      <%= yield %>
   </body>
 </html>

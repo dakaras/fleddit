@@ -1,9 +1,15 @@
 <% if @nested %>
-  <h2><%= @user %>'s Posts</h2>
+  <h2 class='header2' style="text-align: center"><%= @user.username.capitalize %>'s Posts</h2>
 <% else %>
-  <h2>All Posts</h2>
+  <h2 style="text-align: center">All Posts</h2>
 <% end %>
 <% @posts.each do |post| %>
-  <h3><%= link_to post.title, post_path(post) %></h3>
-  <h3><%= post.user.username %></h3>
+  <div class= 'container border shadow-sm p-2 mb-2 bg-white rounded'>
+    <h4><%= post.votes.sum(&:value) %> <%= link_to post.title, post_path(post) %></h4>
+    <p><%= post.user.username %></p>
+    <% if @nested && post.user == current_user %>
+      <%= link_to "Edit Post", edit_post_path(post) %>
+      <%= link_to "Delete Post", post_path(post), method: :delete %>
+    <% end %>
+  </div>
 <% end %>

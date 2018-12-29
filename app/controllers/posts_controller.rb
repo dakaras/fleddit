@@ -1,10 +1,18 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:new, :show, :edit, :update, :destroy]
   before_action :redirect_if_not_authorized!, only: [:edit, :update, :destroy]
+  before_action :redirect_if_post_nonexistent!, only: [:show]
+
   def index
     if params[:user_id]
-      @user = User.find_by(params[:user_id])
-      @posts = @user.authored_posts
+      if set_user
+        @nested = true
+        @user = User.find_by(id: params[:user_id])
+        @posts = @user.authored_posts
+      else
+        flash[:message] = "User does not exist!"
+        redirect_to root_path
+      end
     else
       @posts = Post.all
     end
@@ -26,6 +34,7 @@ class PostsController < ApplicationController
   def show
     @vote = Vote.new
     @vote_total = @post.votes.sum(&:value)
+    @user_vote = Vote.find_by(user: current_user, post: @post)
   end
 
   def edit
@@ -52,7 +61,25 @@ class PostsController < ApplicationController
   end
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
+  end
+
+  def set_user
+    @user = User.find_by(id: params[:user_id])
+  end
+
+  def redirect_if_post_nonexistent!
+    if @post.nil?
+      flash[:message] = "Post does not exist!"
+      redirect_to posts_path
+    end
+  end
+
+  def redirect_if_user_nonexistent!
+    if @user.nil?
+      flash[:message] = "User does not exist!"
+      redirect_to posts_path
+    end
   end
 
   def redirect_if_not_authorized!
